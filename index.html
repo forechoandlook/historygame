@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>历史时间记忆卡片</title>
+
+    <style>
+
+        /* 保持原有CSS样式不变 */
+
+        .card { width: 200px; height: 120px; margin: 10px; perspective: 1000px; display: inline-block; cursor: pointer; }
+
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 2px solid #4CAF50; border-radius: 10px; padding: 15px; text-align: center; display: flex; align-items: center; justify-content: center; }
+
+        .card-back { transform: rotateY(180deg); background-color: #f0f0f0; }
+
+        #container { max-width: 800px; margin: 20px auto; }
+
+        button { padding: 10px 20px; margin: 10px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div style="text-align:center">
+
+        <button onclick="shuffleCards()">随机打乱</button>
+
+        <button onclick="resetCards()">重置卡片</button>
+
+    </div>
+
+    <div id="container"></div>
+
+ 
+
+    <script>
+
+        // 完整50组数据（已修正名称并确保朝代准确性）
+
+        const historyData = [
+
+            { event: "元谋人", time: "旧石器时代早期" },
+
+            { event: "秦朝建立", time: "公元前221年" },
+
+            { event: "河姆渡文化", time: "新石器时代" },
+
+            { event: "汉朝建立", time: "公元前202年" },
+
+            { event: "云冈石窟", time: "北魏" },
+
+            { event: "活字印刷术", time: "北宋" },
+
+            { event: "西周开始", time: "公元前1046年" },
+
+            { event: "《兰亭集序》", time: "东晋" },
+
+            { event: "蒙古建立", time: "1206年" },
+
+            { event: "《伤寒杂病论》", time: "东汉" },
+
+            { event: "隋朝建立", time: "581年" },
+
+            { event: "张骞出使西域", time: "西汉" },
+
+            { event: "《天工开物》", time: "明朝" },
+
+            { event: "魏国建立", time: "220年" },
+
+            { event: "曲辕犁和筒车", time: "唐朝" },
+
+            { event: "澎湖巡检司", time: "元朝" },
+
+            { event: "山顶洞人", time: "旧石器时代晚期" },
+
+            { event: "鉴真抵达日本", time: "唐朝" },
+
+            { event: "设置台湾府", time: "清朝" },
+
+            { event: "《资治通鉴》", time: "北宋" },
+
+            { event: "道教产生", time: "东汉末" },
+
+            { event: "行省制度", time: "元朝" },
+
+            { event: "《齐民要术》", time: "北魏" },
+
+            { event: "岳飞抗金", time: "南宋" },
+
+            { event: "北京人", time: "旧石器时代" },
+
+            { event: "郑和下西洋", time: "明朝" },
+
+            { event: "赤壁之战", time: "东汉末" },
+
+            { event: "《尼布楚条约》", time: "清朝" },
+
+            { event: "夏朝建立", time: "约公元前2070年" },
+
+            { event: "火药", time: "唐末宋初" },
+
+            { event: "文成公主入藏", time: "唐朝" },
+
+            { event: "《红楼梦》", time: "清朝" },
+
+            { event: "蔡伦改进造纸术", time: "东汉" },
+
+            { event: "西晋统一", time: "280年" },
+
+            { event: "市舶司", time: "宋元" },
+
+            { event: "麻沸散", time: "东汉" },
+
+            { event: "明朝建立", time: "1368年" },
+
+            { event: "指南针用于航海", time: "北宋" },
+
+            { event: "龙门石窟", time: "北魏至唐" },
+
+            { event: "安史之乱", time: "唐朝" },
+
+            { event: "《钦定藏内善后章程》", time: "清朝" },
+
+            { event: "百家争鸣", time: "春秋战国" },
+
+            { event: "经济重心南移完成", time: "南宋" },
+
+            { event: "元朝统一全国", time: "1279年" },
+
+            { event: "《本草纲目》", time: "明朝" },
+
+            { event: "官渡之战", time: "东汉末" },
+
+            { event: "设置西域都护", time: "西汉" },
+
+            { event: "瓦子", time: "北宋" },
+
+            { event: "吴国建立", time: "229年" },
+
+            { event: "广州十三行", time: "清朝" }
+
+        ];
+
+ 
+
+        // 保持原有JavaScript函数不变
+
+        function createCards() {
+
+            const container = document.getElementById('container');
+
+            container.innerHTML = '';
+
+            historyData.forEach(item => {
+
+                const card = document.createElement('div');
+
+                card.className = 'card';
+
+                card.innerHTML = `
+
+                    <div class="card-inner">
+
+                        <div class="card-front">${item.event}</div>
+
+                        <div class="card-back">${item.time}</div>
+
+                    </div>
+
+                `;
+
+                card.addEventListener('click', () => {
+
+                    card.classList.toggle('flipped');
+
+                });
+
+                container.appendChild(card);
+
+            });
+
+        }
+
+ 
+
+        function shuffleCards() {
+
+            do {
+
+                // Fisher-Yates洗牌算法增强版
+
+                for (let i = historyData.length - 1; i > 0; i--) {
+
+                    const j = Math.floor(Math.random() * (i + 1));
+
+                    [historyData[i], historyData[j]] = [historyData[j], historyData[i]];
+
+                }
+
+            } while (!validateOrder());
+
+            createCards();
+
+        }
+
+ 
+
+        function validateOrder() {
+
+            for (let i = 1; i < historyData.length; i++) {
+
+                if (historyData[i].time === historyData[i-1].time) return false;
+
+            }
+
+            return true;
+
+        }
+
+ 
+
+        function resetCards() { createCards(); }
+
+        window.onload = createCards;
+
+    </script>
+
+</body>
+
+</html>
